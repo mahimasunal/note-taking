@@ -1,0 +1,92 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+main{
+  display: flex;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+}
+
+/*------------LEFT-CONTAINER-------------*/
+.left{
+  width: 25%;
+  background-color: rgba(0, 0, 0, 0.329);
+  margin-top: 30px;
+  border-top-right-radius: 12px;
+  padding: 72px 60px ;
+}
+
+.leftHeading{
+   margin-bottom: 1rem;
+}
+
+/* -------------RIGHT-CONTAINER---------- */
+.right{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8.5rem;
+}
+
+.rightHeading{
+  font-size: 24px;
+  letter-spacing: -.2px;
+}
+
+.rightPara{
+  margin: 1rem 0px;
+  font-size: 18px;
+}
+
+
+.btn{
+  background-color: black;
+  color: white;
+}
+
+/* ------------MODEL-WINDOW---------- */
+
+.modelWindow{
+  width: 500px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.formBtn{
+  display: flex;
+  justify-content: flex-end;
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+}
+
+label{
+  margin-bottom: .3rem;
+
+}
+
+input{
+  height: 40px;
+  margin-bottom: 1rem;
+  outline: none;
+  padding-left: 2px;
+  font-size: 1rem;
+}
+
+textarea{
+  height: 80px;
+  resize: none;
+  margin-bottom: 1rem;
+  outline: none;
+  padding: 3px;
+  font-size: 15px;
+}
