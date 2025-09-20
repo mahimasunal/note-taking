@@ -1,7 +1,7 @@
-export default function Button(prop){
+export default function Button({className, children, onClick, type = "submit"}){
     return(
         <div>
-            <button className="btn" onClick={prop.onClick}>{prop.children}</button>
+            <button type = {type} className={className} onClick={onClick}>{children}</button>
         </div>
     )
 }

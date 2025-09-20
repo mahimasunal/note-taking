@@ -1,56 +1,110 @@
 import { useState } from 'react'
 import './App.css'
-import Left from './components/left'
+import Left from './components/Left'
 import Right from './components/Right'
-import Window from './components/Window'
+import Form from './components/Form'
+import SavedNote from './components/SavedNote'
 
-const notes = JSON.parse(localStorage.getItem('data')) || []
+let storedNote  = JSON.parse(localStorage.getItem('note'))|| [];
 
 function App() {
+  const[modelOpen, setModelOpen] = useState(false)
+  const[selectedNote, setSelectedNote] = useState(false)
+  const[note, setNote] = useState({
+    title : '',
+    des : '',
+    date : '',
+    tasks : [],
+  })
+  const[notes, setNotes] = useState(storedNote)
+  const[selectedNoteData, setSelectedNoteData] = useState(null);
 
-  const[modelOpen, SetmodelOpen] = useState(false);
+  
+  localStorage.setItem('note', JSON.stringify(notes))
+  
+  function handelFiltering(id){
+    const updatedNotes =  notes.filter((n)=> n.id !== id)    
+    setNotes(updatedNotes)
+  }
 
-  const[title, setTitle] = useState('')
-  const[des, setDes] = useState('')
-  const[date, setDate] = useState('')
+  function handelSelectedNote(noteObj){
+    setSelectedNote(true)
+    setModelOpen(false)
+    setSelectedNoteData(noteObj)
+  }
 
-  const [storedData, setStoredData]  = useState(notes);
+function handelSaveBtn(e){
+  e.preventDefault()
+  setNotes([...notes, note]);
+    setNote({ title: '', des: '', date: '', tasks: [] }); 
+  handelModelClose();
 
+ 
+}
+
+ function handelNotes(value, name){
+    setNote({...note, [name] : value, id : Math.random()})
+    console.log(notes)
+ }
+
+
+ function handleAddNoteTask(task){
+    // const note = notes.find((note) => {
+    //   return note.id === selectedNoteData.id
+    // }
+    // )
+    
+    // note.tasks = [...note.tasks, task]
+
+    const updatedNotes = notes.map((note) => {
+      if(note.id === selectedNoteData.id){
+        return {...note, tasks: [...note.tasks, {task: task, id: Math.random()}]}
+      }
+      return note
+    })
+    setNotes(updatedNotes)
+    
+    setSelectedNoteData({...selectedNoteData, tasks: [...selectedNoteData.tasks, {task: task, id: Math.random()}]})
+
+
+ }
+
+ function handelDltTask(id){
+     const updatedNotes = notes.map((note) => {
+      if(note.id === selectedNoteData.id){
+        return {
+        ...note,
+        tasks: note.tasks.filter((t) => t.id !== id),
+      };
+      }
+      return note
+    })
+    setNotes(updatedNotes)
+    setSelectedNoteData({...selectedNoteData, tasks: selectedNoteData.tasks.filter((t) => t.id !== id)})
+
+ }
 
   function handelModelOpen(){
-     SetmodelOpen(true);
+    setModelOpen(true)
+    setSelectedNote(false)
   }
 
   function handelModelClose(){
-    SetmodelOpen(false);
+    setModelOpen(false)
   }
-
-
-
-function handelSaveBtn(){
-  let noteData = {
-    id : Math.random(),
-    Title : title,
-    Des : des,
-    Date : date
-  }
-
-  setStoredData([...storedData, noteData])
-  console.log(storedData)
-  localStorage.setItem('data', JSON.stringify(storedData))
-
-
-
-}
 
   return (
-     <main>
-        <Left handelModelOpen = {handelModelOpen} storedData = {storedData}></Left>
-
-        {!modelOpen && <Right handelModelOpen ={handelModelOpen}></Right>}
-
-      { modelOpen && <Window handelModelClose = {handelModelClose} setTitle={setTitle} setDes={setDes} setDate={setDate} handelSaveBtn = {handelSaveBtn}></Window>}
-     </main>
+    <div className='container'>
+    <Left handelModelOpen = {handelModelOpen} notes = {notes} handelSelectedNote ={handelSelectedNote} handelFiltering = {handelFiltering}></Left>
+    
+    {modelOpen && <Form handelModelClose = {handelModelClose} handelNotes = {handelNotes} handelSaveBtn = {handelSaveBtn}></Form> }
+    
+    {selectedNote && <SavedNote selectedNoteData = {selectedNoteData} onAddTask ={handleAddNoteTask}onDltTask = {handelDltTask}></SavedNote>  }
+    
+     {!modelOpen && !selectedNote && <Right /> }
+   
+ 
+    </div>
   )
 }
 

@@ -1,16 +1,29 @@
-import Button from "./Button";
+import Button from './Button'
 
-export default function Left(prop){
+export default function Left({handelModelOpen, notes, handelSelectedNote, handelFiltering}){
     return(
-        <div className="left">
+        
+      <div className="left">
             <h2 className="leftHeading">YOUR PROJECTS</h2>
-            <Button onClick = {prop.handelModelOpen}>add Project</Button>
-            
+            <Button className = "addProjectBtn" onClick = {handelModelOpen}>Add Project</Button>
+
             <div className="listTitle">
-                {prop.storedData.map((obj)=>{
-                   return <li>{obj.Title}</li>
-                })}
+            {
+                notes.map(note=>{
+                 return <li className='individual-title-box' key={note.id} onClick={()=>{
+                  
+                    handelSelectedNote(note)
+                 }}><span>{note.title}</span> <button onClick={(e)=>{
+                    console.log(note)
+                    e.stopPropagation()
+                    handelFiltering(note.id)
+                 }}>❌</button></li>
+               })
+
+            }
             </div>
+            
         </div>
+
     )
 }
